@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JLPT N1 学习计划</title>
+<style>:root {
+  --bg: #f0f2f5;
+  --card: #ffffff;
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-subtle: #eff6ff;
+  --accent-green: #16a34a;
+  --accent-green-bg: #f0fdf4;
+  --yellow: #f59e0b;
+  --yellow-bg: #fffbeb;
+  --yellow-border: #fbbf24;
+  --text: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-hover: 0 4px 12px rgba(0,0,0,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans SC","PingFang SC",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;padding:1.25rem;min-height:100vh
+}
+.container{max-width:1100px;margin:0 auto}
+
+header{
+  background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:1.25rem 1.5rem;margin-bottom:1rem;
+  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.75rem
+}
+header h1{font-size:1.15rem;font-weight:700;color:var(--text);letter-spacing:-.01em}
+header h1 span{color:var(--primary)}
+header .subtitle{font-size:.8rem;color:var(--text-muted);margin-top:1px}
+.header-left{display:flex;flex-direction:column;gap:2px}
+.stats{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.stat{text-align:center;padding:0 .4rem}
+.stat+.stat{border-left:1px solid var(--border);padding-left:.8rem}
+.stat-value{font-size:1.1rem;font-weight:700;color:var(--text)}
+.stat-label{font-size:.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.03em}
+.progress-track{width:140px;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary-light));border-radius:2px;transition:width .5s ease}
+.reset-btn{
+  background:var(--border);border:none;color:var(--text-muted);padding:.3rem .7rem;
+  border-radius:var(--radius-sm);cursor:pointer;font-size:.7rem;transition:all .15s;
+  font-family:inherit
+}
+.reset-btn:hover{background:#fee2e2;color:#dc2626}
+
+.week-card{
+  background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+  margin-bottom:.75rem;overflow:hidden;transition:box-shadow .2s
+}
+.week-card:hover{box-shadow:var(--shadow-hover)}
+.week-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.7rem 1.1rem;cursor:pointer;user-select:none;
+  transition:background .15s;gap:.5rem
+}
+.week-header:hover{background:var(--primary-subtle)}
+.week-title{font-size:.85rem;font-weight:600;color:var(--text)}
+.week-title .week-tag{color:var(--primary);margin-right:.35rem}
+.week-progress{font-size:.72rem;color:var(--text-muted);white-space:nowrap}
+.week-header .toggle-icon{font-size:.55rem;color:var(--text-muted);transition:transform .2s;margin-left:auto}
+.week-header.collapsed .toggle-icon{transform:rotate(-90deg)}
+.week-body{overflow-x:auto;transition:max-height .25s ease}
+.week-body.collapsed{max-height:0;overflow:hidden}
+
+table{width:100%;border-collapse:collapse;font-size:.78rem;min-width:620px;table-layout:fixed}
+thead th{
+  padding:.65rem .5rem;font-weight:500;text-align:center;
+  color:var(--text-secondary);border-bottom:1.5px solid var(--border);
+  white-space:nowrap;font-size:.7rem;position:sticky;top:0;background:var(--card);z-index:1
+}
+thead th:first-child{text-align:left;padding-left:.9rem;width:115px;color:var(--text-muted);font-weight:400;font-size:.68rem}
+thead th.date-header{padding-top:.55rem;padding-bottom:.5rem}
+thead th.date-header .day-label{display:block;font-size:.82rem;font-weight:600;color:var(--text)}
+thead th.date-header .date-label{display:block;font-size:.62rem;color:var(--text-muted);margin-top:0;font-weight:400}
+thead th.rest-day-header{background:var(--border-light)}
+thead th.rest-day-header .day-label{color:var(--text-muted)}}
+
+/* Module label column */
+tbody td{
+  padding:.7rem .4rem;text-align:center;border-bottom:1px solid var(--border-light);
+  vertical-align:middle;position:relative;height:130px;transition:background .1s
+}
+tbody td:first-child{
+  text-align:left;padding-left:.9rem;font-weight:500;color:var(--text-secondary);
+  border-right:1px solid var(--border-light);background:var(--card);
+  position:sticky;left:0;z-index:1;font-size:.75rem;white-space:nowrap
+}
+tbody tr:hover td:not(:first-child){background:#f8fafc}
+.module-label-row td:first-child{border-left:3px solid var(--primary)}
+
+
+/* Methods card */
+.methods-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:.75rem;overflow:hidden}
+.methods-header{display:flex;justify-content:space-between;align-items:center;padding:.6rem 1.1rem;cursor:pointer;user-select:none;transition:background .15s;gap:.5rem;color:var(--text-muted)}
+.methods-header:hover{background:var(--primary-subtle);color:var(--text)}
+.methods-header .title{font-size:.8rem;font-weight:500;display:flex;align-items:center;gap:6px}
+.methods-header .arrow{font-size:.5rem;transition:transform .2s}
+.methods-body.collapsed .methods-header .arrow{transform:rotate(-90deg)}
+.methods-body{transition:max-height .25s ease;max-height:0;overflow:hidden}
+.methods-body.open{max-height:800px}
+.methods-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;padding:0 1.1rem 1rem}
+.method-item{background:var(--bg);border-radius:var(--radius-sm);padding:.65rem .75rem;font-size:.72rem;line-height:1.5;color:var(--text-secondary)}
+.method-item .m-title{font-weight:600;color:var(--text);margin-bottom:2px;font-size:.75rem}
+.methods-table-wrap{overflow-x:auto}
+.methods-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:.78rem;margin:.25rem 0 .5rem}
+.methods-table tbody td{padding:.28rem .6rem;border-bottom:1px solid var(--border-light);vertical-align:top;line-height:1.45;color:var(--text-secondary);font-size:.74rem;word-break:break-word}
+.methods-table tbody td:first-child{width:15%;color:var(--primary)}
+.methods-table tbody td:nth-child(2){width:25%}
+.methods-table tbody td:nth-child(3){width:60%}
+.methods-table tbody tr:last-child td{border-bottom:none}
+.methods-table tbody tr.section-head td{font-weight:600;color:var(--text);padding-top:.5rem;font-size:.78rem}
+.methods-table tbody td:first-child{color:var(--primary)}
+.methods-table tbody td.sub-item{padding-left:1.5rem;white-space:normal}
+@media(max-width:768px){
+  .methods-table thead th:first-child{width:60px}
+  .methods-table thead th:nth-child(2){width:110px}
+}
+@media(max-width:768px){.methods-grid{grid-template-columns:1fr}}
+
+/* Plan bars */
+.plan-cell{position:relative;cursor:pointer;transition:opacity .12s}
+.plan-cell:hover{opacity:.8}
+.plan-cell::before{
+  content:'';position:absolute;top:10px;left:4px;right:4px;bottom:10px;
+  border-radius:6px;background:var(--primary-subtle);z-index:0;transition:background .2s
+}
+.plan-cell .cell-content{
+  position:relative;z-index:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;min-height:120px
+}
+.plan-cell .cell-line1{font-size:.78rem;color:var(--text);font-weight:500;line-height:1.35;word-break:break-word;display:block}
+.plan-cell .cell-line2{font-size:.65rem;color:var(--text-secondary);line-height:1.25;word-break:break-word;display:block}
+.plan-cell .cell-line3{font-size:.63rem;color:var(--text-muted);line-height:1.25;word-break:break-word;display:block}
+.rest-cell{color:var(--text-muted);font-style:italic;font-size:.62rem;cursor:default}
+.rest-cell::before{display:none!important}
+
+/* Done state */
+.plan-cell.done .cell-line1{color:var(--accent-green);text-decoration:line-through;opacity:.7}
+.plan-cell.done .cell-line2{color:var(--accent-green);text-decoration:line-through;opacity:.6}
+.plan-cell.done .cell-line3{color:var(--accent-green);text-decoration:line-through;opacity:.5}
+.plan-cell.done::before{background:var(--accent-green-bg)}
+.plan-cell.done .cell-icon{color:var(--accent-green)}
+
+/* Today highlight - full column frame */
+.today-header{border-left:2.5px solid var(--yellow-border)!important;border-right:2.5px solid var(--yellow-border)!important;background:var(--yellow-bg)!important}
+.today-header .day-label,.today-header .date-label{color:#92400e!important;font-weight:600!important}
+.today-cell{border-left:2.5px solid var(--yellow-border)!important;border-right:2.5px solid var(--yellow-border)!important}
+.today-cell .plan-cell::before{background:var(--yellow-bg)!important}
+
+.week-summary{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.45rem 1.1rem;font-size:.72rem;color:var(--text-muted);
+  border-top:1px solid var(--border-light)
+}
+.week-summary b{color:var(--primary);font-weight:600}
+
+/* Mobile */
+@media(max-width:768px){
+  body{padding:.6rem}
+  header{padding:1rem;flex-direction:column;align-items:flex-start;gap:.5rem}
+  .stats{width:100%;justify-content:space-between}
+  header h1{font-size:1rem}
+  table{font-size:.7rem;min-width:480px}
+  thead th{font-size:.62rem;padding:.3rem .2rem}
+  thead th:first-child{min-width:75px;padding-left:.45rem;font-size:.62rem}
+  tbody td:first-child{padding-left:.45rem;font-size:.68rem}
+  .plan-cell .cell-text{font-size:.58rem}
+  .progress-track{width:100px}
+  .stat-value{font-size:.95rem}
+}</style>
+</head>
+<body>
+<div class="container" id="app">
+
+<header>
+  <div>
+    <h1>📚 JLPT N1 学习计划</h1>
+    <div class="subtitle">N3→N2→N1 · 22周 · 7/6 ~ 12/5</div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="stat-value" id="statDone">0</div><div class="stat-label">已完成</div></div>
+    <div class="stat"><div class="stat-value" id="statTotal">0</div><div class="stat-label">总计划</div></div>
+    <div class="stat"><div class="stat-value" id="statPercent">0%</div><div class="stat-label">完成率</div></div>
+    <div><div class="progress-track"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div></div>
+    <button class="reset-btn" onclick="resetAll()">↺ 重置</button>
+  </div>
+</header>
+
+<div class="methods-card">
+  <div class="methods-header" onclick="this.parentNode.querySelector('.methods-body').classList.toggle('open')">
+    <span class="title">📖 学习方法</span>
+    <span class="arrow">▼</span>
+  </div>
+  <div class="methods-body">
+    <div class="methods-table-wrap">
+      <table class="methods-table">
+
+        <tbody>
+          <tr class="section-head"><td>📖 词汇</td><td>绿皮书 N3→N2→N1</td><td></td></tr>
+          <tr><td></td><td>每天1单元(约20词)</td><td class="sub-item">读例句→遮中文说日文→遮日文说中文</td></tr>
+          <tr><td></td><td>复习</td><td class="sub-item">复习前日错词，画正字标记不熟的</td></tr>
+          <tr><td></td><td>N1重点</td><td class="sub-item">音读词、拟声拟态词、动词搭配(自动/他动词对照记)</td></tr>
+
+          <tr class="section-head"><td>📝 语法</td><td>新完全掌握 N3→N2→N1</td><td></td></tr>
+          <tr><td></td><td>每天2~3个句型</td><td class="sub-item">看解说→默写例句(手写)→做课后题</td></tr>
+          <tr><td></td><td>易混句型对比</td><td class="sub-item">如〜をよそに / 〜をしりめに / 〜をものともせず</td></tr>
+          <tr><td></td><td>N1特有</td><td class="sub-item">文语残留(〜んがため、〜そばから、〜なくして)需专门背</td></tr>
+
+          <tr class="section-head"><td>🎧 听力</td><td>N2/N1真题</td><td></td></tr>
+          <tr><td></td><td>精听法</td><td class="sub-item">①完整听→②逐句听写→③补全→④对照原文→⑤分析原因→⑥影子跟读</td></tr>
+          <tr><td></td><td>N1问题4(即时応答)</td><td class="sub-item">限时3秒选答案，练反应速度</td></tr>
+          <tr><td></td><td>每周</td><td class="sub-item">选1段长shadowing到同步</td></tr>
+
+          <tr class="section-head"><td>📰 阅读</td><td>N2/N1真题</td><td></td></tr>
+          <tr><td></td><td>精读</td><td class="sub-item">读1遍→查生词→逐句翻译→再读一遍</td></tr>
+          <tr><td></td><td>速读</td><td class="sub-item">短文3min, 中长文8min, 长文12min, 限时练习</td></tr>
+          <tr><td></td><td></td><td class="sub-item">读完用一句话概括每段主旨</td></tr>
+          <tr><td></td><td>N1对比阅读</td><td class="sub-item">先看问题再快速定位</td></tr>
+
+          <tr class="section-head"><td>💬 会话</td><td>从零开始</td><td></td></tr>
+          <tr><td></td><td>自言自语</td><td class="sub-item">每天说2min, 录音回听，标记卡壳</td></tr>
+          <tr><td></td><td></td><td class="sub-item">同一主题说2~3天直到流利</td></tr>
+          <tr><td></td><td>场景脚本</td><td class="sub-item">写短脚本→朗读→脱稿说(工作场景优先)</td></tr>
+          <tr><td></td><td>推荐</td><td class="sub-item">iTalki/HelloTalk, 每周2~3次</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div id="weeksContainer"></div>
+
+<script>
+
+const MODULES = [
+  {id:"m0", label:"📖 词汇(70min)"},
+  {id:"m1", label:"📝 语法(60min)"},
+  {id:"m2", label:"🎧 听力(70min)"},
+  {id:"m3", label:"📰 阅读(60min)"},
+  {id:"m4", label:"💬 会话(40min)"}
+];
+
+const WEEKS = [
+  { name:"P1·N3 W1 7/6~7/11", days:[
+    ["一","7/6",["绿皮书N3|第1~3单元|新词+例句", "新完全掌握N3|第1~3节|默写例句", "N2会话|1段|听写+跟读", "N2短文|2篇|限时3min+精读", "自言自语|2min|今日计划"]],
+    ["二","7/7",["绿皮书N3|复习前日+第4~5单元|复习+新词", "新完全掌握N3|复习前日+第4~6节|复习+默写", "N2会话|1段|跟读+复述", "N2短文|2篇|精读+生词", "场景:自我介绍|2min"]],
+    ["三","7/8",["绿皮书N3|第6~7单元|新词+例句", "新完全掌握N3|第7~8节|默写例句", "N2独白|1段|听写+跟读", "N2中篇|1篇|精读+概括", "自言自语|2min|周末回顾"]],
+    ["四","7/9",["绿皮书N3|复习前日+第8~9单元|复习+新词", "新完全掌握N3|复习前日+第9~10节|复习+默写", "N2独白|1段|跟读+复述", "N2短文|2篇|限时+精读", "场景:电话应对|2min"]],
+    ["五","7/10",["绿皮书N3|第10~11单元|新词+例句", "新完全掌握N3|第11~12节|默写例句", "N2问题1~2|各2题|精听", "N2中篇|1篇|翻译+概括", "自言自语|2min|描述一日"]],
+    ["六","7/11",["绿皮书N3|第1~11单元|总复习→遮日→中", "新完全掌握N3|第1~12节|总复习→遮答案自测", "N2听力|错题|精听+分析", "N2长文|1篇|精读", "周总结|3min"]]
+  ]},,
+  { name:"P1·N3 W2 7/13~7/18", days:[
+    ["一","7/13",["绿皮书N3|第12~13单元|新词+例句", "新完全掌握N3|第13~15节|默写例句", "N2会话|1段|听写+跟读", "N2短文|2篇|精读+生词", "自言自语|2min|工作描述"]],
+    ["二","7/14",["绿皮书N3|复习前日+第14~15单元|复习+新词", "新完全掌握N3|复习前日+第16~18节|复习+默写", "N2独白|1段|听写+跟读", "N2中篇|1篇|精读+概括", "场景:道歉|2min"]],
+    ["三","7/15",["绿皮书N3|第16~17单元|新词+例句", "新完全掌握N3|第19~20节|默写例句", "N2问题1~2|各3题|精听", "N2中篇|1篇|限时8min", "自言自语|2min|兴趣爱好"]],
+    ["四","7/16",["绿皮书N3|复习前日+第18~19单元|复习+新词", "新完全掌握N3|复习前日+第21~22节|复习+默写", "N2听力|完整1套|限时", "N2长文|1篇|精读+翻译", "场景:商量|2min"]],
+    ["五","7/17",["绿皮书N3|第20~21单元|新词+例句", "新完全掌握N3|第23~24节|默写例句", "N2听力|错题|精听", "N2长文|1篇|概括+生词", "自言自语|2min|理想生活"]],
+    ["六","7/18",["绿皮书N3|第12~21单元|总复习→遮日→中", "新完全掌握N3|第13~24节|总复习→遮答案自测", "N2会话|选段|Shadowing", "N2阅读|错题|分析", "周总结|3min"]]
+  ]},,
+  { name:"P1·N3 W3 7/20~7/25", days:[
+    ["一","7/20",["绿皮书N3|第22~23单元|新词+例句", "新完全掌握N3|第25~27节|默写例句", "N2听力|完整1套|限时", "N2中篇|1篇|精读+翻译", "自言自语|2min|社会话题"]],
+    ["二","7/21",["绿皮书N3|复习前日+第24~25单元|复习+新词", "新完全掌握N3|复习前日+第28~30节|复习+默写", "N2听力|错题|精听+分析", "N2长文|1篇|精读+概括", "场景:演讲|2min"]],
+    ["三","7/22",["绿皮书N3|第26~27单元|新词+例句", "新完全掌握N3|第31~32节|默写例句", "N2听力|盲听→复述", "N2长文|1篇|限时10min", "自言自语|2min|观点表达"]],
+    ["四","7/23",["绿皮书N3|复习前日+第28~29单元|复习+新词", "新完全掌握N3|复习前日+第33~34节|复习+默写", "N2听力|选段|Shadowing", "N2阅读|错题|分析", "场景:讨论|2min"]],
+    ["五","7/24",["绿皮书N3|第30~31单元|新词+例句", "新完全掌握N3|第35~36节|默写例句", "N2听力|错题汇总", "N2阅读|全题型|模拟", "自言自语|3min|自由表达"]],
+    ["六","7/25",["绿皮书N3|第22~31单元|总复习→遮日→中", "新完全掌握N3|第25~36节|总复习→遮答案自测", "N3听力总复习|弱项|专项", "N3阅读总复习|错题|整理", "周总结|3min"]]
+  ]},,
+  { name:"P2·N2 W1 7/27~8/1", days:[
+    ["一","7/27",["绿皮书N2|第1~2单元|新词+例句", "新完全掌握N2|第1~2节|默写例句", "N2会话|1段|听写+跟读", "N2短文|3篇|限时3min", "自言自语|2min|今日计划"]],
+    ["二","7/28",["绿皮书N2|复习前日+第3~4单元|复习+新词", "新完全掌握N2|复习前日+第3~4节|复习+默写", "N2独白|1段|听写+跟读", "N2短文|2篇|精读+生词", "场景:汇报工作|2min"]],
+    ["三","7/29",["绿皮书N2|第5~5单元|新词+例句", "新完全掌握N2|第5~6节|默写例句", "N2问题1~2|各2题|精听", "N2中篇|1篇|精读+概括", "自言自语|2min|周末安排"]],
+    ["四","7/30",["绿皮书N2|复习前日+第6~6单元|复习+新词", "新完全掌握N2|复习前日+第7~7节|复习+默写", "N2听力|完整1套|限时", "N2中篇|1篇|限时8min", "场景:请假|2min"]],
+    ["五","7/31",["绿皮书N2|第7~7单元|新词+例句", "新完全掌握N2|第8~8节|默写例句", "N2听力|错题|精听", "N2长文|1篇|精读+翻译", "自言自语|2min|描述环境"]],
+    ["六","8/1",["绿皮书N2|第1~7单元|总复习→遮日→中", "新完全掌握N2|第1~8节|总复习→遮答案自测", "N2会话|选段|Shadowing", "N2阅读|错题|分析", "周总结|3min"]]
+  ]},,
+  { name:"P2·N2 W2 8/3~8/8", days:[
+    ["一","8/3",["绿皮书N2|第8~9单元|新词+例句", "新完全掌握N2|第9~10节|默写例句", "N2会话|1段|听写+跟读", "N2中篇|1篇|精读+概括", "自言自语|2min|工作描述"]],
+    ["二","8/4",["绿皮书N2|复习前日+第10~11单元|复习+新词", "新完全掌握N2|复习前日+第11~12节|复习+默写", "N2独白|1段|听写+跟读", "N2中篇|1篇|限时8min", "场景:道歉|2min"]],
+    ["三","8/5",["绿皮书N2|第12~12单元|新词+例句", "新完全掌握N2|第13~14节|默写例句", "N2问题3~4|各2题|精听", "N2长文|1篇|精读+翻译", "自言自语|2min|兴趣爱好"]],
+    ["四","8/6",["绿皮书N2|复习前日+第13~13单元|复习+新词", "新完全掌握N2|复习前日+第15~15节|复习+默写", "N2听力|完整1套|限时", "N2长文|1篇|概括+生词", "场景:商量|2min"]],
+    ["五","8/7",["绿皮书N2|第14~14单元|新词+例句", "新完全掌握N2|第16~16节|默写例句", "N2听力|错题|精听", "N2对比阅读|1组|定位训练", "自言自语|2min|理想生活"]],
+    ["六","8/8",["绿皮书N2|第8~14单元|总复习→遮日→中", "新完全掌握N2|第9~16节|总复习→遮答案自测", "N2听力|选段|复述", "N2阅读|错题|分析", "周总结|3min"]]
+  ]},,
+  { name:"P2·N2 W3 8/10~8/15", days:[
+    ["一","8/10",["绿皮书N2|第15~16单元|新词+例句", "新完全掌握N2|第17~18节|默写例句", "N2听力|完整1套|限时", "N2长文|1篇|精读+翻译", "自言自语|2min|新闻感想"]],
+    ["二","8/11",["绿皮书N2|复习前日+第17~18单元|复习+新词", "新完全掌握N2|复习前日+第19~20节|复习+默写", "N2听力|错题|精听+分析", "N2长文|1篇|限时10min", "场景:提案|2min"]],
+    ["三","8/12",["绿皮书N2|第19~19单元|新词+例句", "新完全掌握N2|第21~22节|默写例句", "N1听力|问题1|初听", "N2阅读|全题型|模拟", "自言自语|2min|描述过程"]],
+    ["四","8/13",["绿皮书N2|复习前日+第20~20单元|复习+新词", "新完全掌握N2|复习前日+第23~23节|复习+默写", "N1听力|问题2|初听", "N1短文|1篇|精读", "场景:拒绝|2min"]],
+    ["五","8/14",["绿皮书N2|第21~21单元|新词+例句", "新完全掌握N2|第24~24节|默写例句", "N2听力|全题型|模考", "N2阅读|错题|汇总", "自言自语|3min|自由表达"]],
+    ["六","8/15",["绿皮书N2|第15~21单元|总复习→遮日→中", "新完全掌握N2|第17~24节|总复习→遮答案自测", "N2听力|选段|Shadowing", "N2阅读总复习|错题|分析", "周总结|3min"]]
+  ]},,
+  { name:"P2·N2 W4 8/17~8/22", days:[
+    ["一","8/17",["绿皮书N2|第22~23单元|新词+例句", "新完全掌握N2|第25~26节|默写例句", "N1听力|问题1|精听", "N1短文|1篇|精读", "自言自语|2min|社会话题"]],
+    ["二","8/18",["绿皮书N2|复习前日+第24~25单元|复习+新词", "新完全掌握N2|复习前日+第27~28节|复习+默写", "N1听力|问题2|精听", "N1中篇|1篇|精读+概括", "场景:演讲|2min"]],
+    ["三","8/19",["绿皮书N2|第26~26单元|新词+例句", "新完全掌握N2|第29~30节|默写例句", "N1听力|问题3|精听", "N1中篇|1篇|限时8min", "自言自语|2min|观点表达"]],
+    ["四","8/20",["绿皮书N2|复习前日+第27~27单元|复习+新词", "新完全掌握N2|复习前日+第31~31节|复习+默写", "N1听力|完整1套|不限时", "N1长文|1篇|精读+翻译", "场景:讨论|2min"]],
+    ["五","8/21",["绿皮书N2|第28~28单元|新词+例句", "新完全掌握N2|第32~32节|默写例句", "N1听力|错题|分析", "N1对比阅读|1组|定位", "自言自语|3min|学习计划"]],
+    ["六","8/22",["绿皮书N2|第22~28单元|总复习→遮日→中", "新完全掌握N2|第25~32节|总复习→遮答案自测", "N1听力|选段|跟读", "N1阅读|错题|分析", "周总结|3min|N2回顾"]]
+  ]},,
+  { name:"P2·N2 W5 8/24~8/29", days:[
+    ["一","8/24",["绿皮书N2|第29~30单元|新词+例句", "新完全掌握N2|第33~34节|默写例句", "N1听力|问题1~2|精听", "N1中篇|1篇|精读+概括", "iTalki|25min|自由会话"]],
+    ["二","8/25",["绿皮书N2|复习前日+第31~32单元|复习+新词", "新完全掌握N2|复习前日+第35~36节|复习+默写", "N1听力|完整1套|限时", "N1长文|1篇|限时10min", "自言自语|2min|N1目标"]],
+    ["三","8/26",["绿皮书N2|第33~33单元|新词+例句", "新完全掌握N2|第37~38节|默写例句", "N1听力|错题|分析", "N1对比阅读|1组|定位", "iTalki|25min|话题讨论"]],
+    ["四","8/27",["绿皮书N2|复习前日+第34~34单元|复习+新词", "新完全掌握N2|复习前日+第39~39节|复习+默写", "N1听力|问题3~4|精听", "N1长文|1篇|精读+翻译", "自言自语|2min|学习策略"]],
+    ["五","8/28",["绿皮书N2|第35~35单元|新词+例句", "新完全掌握N2|第40~40节|默写例句", "N1听力|选段|Shadowing", "N2阅读总复习|错题|汇总", "iTalki|25min|模拟面试"]],
+    ["六","8/29",["绿皮书N2|第29~35单元|总复习→遮日→中", "新完全掌握N2|第33~40节|总复习→遮答案自测", "N2听力总复习|弱项|专项", "N2阅读最终总结", "周总结|3min"]]
+  ]},,
+  { name:"P2·N2 W6 8/31~9/5", days:[
+    ["一","8/31",["绿皮书N2|第36~37单元|新词+例句", "新完全掌握N2|第41~42节|默写例句", "N2听力总复习|全题型|模考", "N2阅读总复习|全题型|模考", "自言自语|2min|N2总结"]],
+    ["二","9/1",["绿皮书N2|复习前日+第38~38单元|复习+新词", "新完全掌握N2|复习前日+第43~44节|复习+默写", "N2听力总复习|错题|最终分析", "N2阅读总复习|错题|最终分析", "iTalki|25min|自由会话"]],
+    ["三","9/2",["绿皮书N2|第39~39单元|新词+例句", "新完全掌握N2|第45~46节|默写例句", "N1听力|问题1~2|强化", "N1短文|1篇|精读", "自言自语|2min|N1准备"]],
+    ["四","9/3",["绿皮书N2|复习前日+第40~40单元|复习+新词", "新完全掌握N2|复习前日+第47~47节|复习+默写", "N1听力|完整1套|限时", "N1中篇|1篇|精读", "场景:发表|3min"]],
+    ["五","9/4",["绿皮书N2|第41~41单元|新词+例句", "新完全掌握N2|第48~48节|默写例句", "N1听力|弱项|专项", "N2阅读总复习|弱项|专项", "自言自语|3min|学习反思"]],
+    ["六","9/5",["绿皮书N2|第36~41单元|总复习→遮日→中", "新完全掌握N2|第41~48节|总复习→遮答案自测", "N2听力最终总结", "N2阅读最终|整理", "周总结|3min|N2总回顾"]]
+  ]},,
+  { name:"P3·N1 W1 9/7~9/12", days:[
+    ["一","9/7",["绿皮书N1|第1~1单元|新词+例句", "新完全掌握N1|第1~2节|默写例句", "N1听力|问题1~2|各2题精听", "N1短文|2篇|限时+精读", "自言自语|2min|N1目标"]],
+    ["二","9/8",["绿皮书N1|复习前日+第2~2单元|复习+新词", "新完全掌握N1|复习前日+第3~3节|复习+默写", "N1听力|完整1套|限时", "N1中篇|1篇|精读+概括", "场景:工作商谈|3min"]],
+    ["三","9/9",["绿皮书N1|第3~3单元|新词+例句", "新完全掌握N1|第4~4节|默写例句", "N1听力|错题|分析", "N1长文|1篇|精读+翻译", "自言自语|2min|社会话题"]],
+    ["四","9/10",["绿皮书N1|复习前日+第4~4单元|复习+新词", "新完全掌握N1|复习前日+第5~5节|复习+默写", "N1听力|问题3|精听", "N1长文|1篇|限时12min", "iTalki|25min|自由会话"]],
+    ["五","9/11",["绿皮书N1|第5~5单元|新词+例句", "新完全掌握N1|第6~6节|默写例句", "N1听力|问题4|限时3秒", "N1对比阅读|1组|定位", "自言自语|3min|观点发表"]],
+    ["六","9/12",["绿皮书N1|第1~5单元|总复习→遮日→中", "新完全掌握N1|第1~6节|总复习→遮答案自测", "N1听力|选段|Shadowing", "N1阅读|错题|分析", "周总结|3min"]]
+  ]},,
+  { name:"P3·N1 W2 9/14~9/19", days:[
+    ["一","9/14",["绿皮书N1|第6~6单元|新词+例句", "新完全掌握N1|第7~8节|默写例句", "N1听力|问题1~2|各2题精听", "N1短文|2篇|精读+生词", "自言自语|2min|新闻评论"]],
+    ["二","9/15",["绿皮书N1|复习前日+第7~7单元|复习+新词", "新完全掌握N1|复习前日+第9~9节|复习+默写", "N1听力|完整1套|限时", "N1中篇|1篇|精读+翻译", "场景:演讲发表|3min"]],
+    ["三","9/16",["绿皮书N1|第8~8单元|新词+例句", "新完全掌握N1|第10~10节|默写例句", "N1听力|错题|分析", "N1长文|1篇|精读+概括", "自言自语|2min|学习策略"]],
+    ["四","9/17",["绿皮书N1|复习前日+第9~9单元|复习+新词", "新完全掌握N1|复习前日+第11~11节|复习+默写", "N1听力|问题3|精听", "N1长文|1篇|限时12min", "iTalki|25min|话题讨论"]],
+    ["五","9/18",["绿皮书N1|第10~10单元|新词+例句", "新完全掌握N1|第12~12节|默写例句", "N1听力|问题4|限时3秒", "N1对比阅读|1组|定位", "自言自语|3min|自由表达"]],
+    ["六","9/19",["绿皮书N1|第6~10单元|总复习→遮日→中", "新完全掌握N1|第7~12节|总复习→遮答案自测", "N1听力|选段|Shadowing", "N1阅读|错题|分析", "周总结|3min"]]
+  ]},,
+  { name:"P3·N1 W3 9/21~9/26", days:[
+    ["一","9/21",["绿皮书N1|第11~11单元|新词+例句", "新完全掌握N1|第13~13节|默写例句", "N1听力|问题1~2|精听", "N1长文|1篇|精读+翻译", "自言自语|2min|N1难点"]],
+    ["二","9/22",["绿皮书N1|复习前日+第12~12单元|复习+新词", "新完全掌握N1|复习前日+第14~14节|复习+默写", "N1听力|完整1套|限时", "N1长文|1篇|限时12min", "iTalki|25min|自由会话"]],
+    ["三","9/23",["绿皮书N1|第13~13单元|新词+例句", "新完全掌握N1|第15~15节|默写例句", "N1听力|错题|分析", "N1阅读|全题型|模拟", "自言自语|2min|考试策略"]],
+    ["四","9/24",["绿皮书N1|复习前日+第14~14单元|复习+新词", "新完全掌握N1|复习前日+第16~16节|复习+默写", "N1听力|问题3|精听", "N1对比阅读|1组|定位", "场景:辩论|3min"]],
+    ["五","9/25",["绿皮书N1|第15~15单元|新词+例句", "新完全掌握N1|第17~17节|默写例句", "N1听力|问题4|限时练反应", "N1阅读|错题|汇总", "自言自语|3min|观点陈述"]],
+    ["六","9/26",["绿皮书N1|第11~15单元|总复习→遮日→中", "新完全掌握N1|第13~17节|总复习→遮答案自测", "N1听力|选段|Shadowing", "N1阅读总复习|错题|分析", "周总结|3min"]]
+  ]},,
+  { name:"P3·N1 W4 9/28~10/3", days:[
+    ["一","9/28",["绿皮书N1|第16~16单元|新词+例句", "新完全掌握N1|第18~18节|默写例句", "N1听力|完整1套|限时", "N1长文|1篇|精读+概括", "自言自语|2min|日常话题"]],
+    ["二","9/29",["绿皮书N1|复习前日+第17~17单元|复习+新词", "新完全掌握N1|复习前日+第19~19节|复习+默写", "N1听力|错题|精听+分析", "N1全真模拟|阅读|限时", "iTalki|25min|自由会话"]],
+    ["三","9/30",["绿皮书N1|第18~18单元|新词+例句", "新完全掌握N1|第20~20节|默写例句", "N1听力|盲听→复述", "N1阅读|错题|分析", "自言自语|2min|日语心得"]],
+    ["四","10/1",["绿皮书N1|复习前日+第19~19单元|复习+新词", "新完全掌握N1|复习前日+第21~21节|复习+默写", "N1听力|问题3~4|专项", "N1阅读|全题型|模拟", "场景:讨论|3min"]],
+    ["五","10/2",["绿皮书N1|第20~20单元|新词+例句", "新完全掌握N1|第22~22节|默写例句", "N1听力|全题型|模考", "N1阅读|弱项|专项", "自言自语|3min|考前状态"]],
+    ["六","10/3",["绿皮书N1|第16~20单元|总复习→遮日→中", "新完全掌握N1|第18~22节|总复习→遮答案自测", "N1听力|弱项|专项强化", "N1阅读总复习|错题|整理", "周总结|3min|N1中段"]]
+  ]},,
+  { name:"P3·N1 W5 10/5~10/10", days:[
+    ["一","10/5",["绿皮书N1|第21~21单元|新词+例句", "新完全掌握N1|第23~23节|默写例句", "N1听力|完整1套|限时", "N1长文|1篇|精读+翻译", "自言自语|2min|本周主题"]],
+    ["二","10/6",["绿皮书N1|复习前日+第22~22单元|复习+新词", "新完全掌握N1|复习前日+第24~24节|复习+默写", "N1听力|错题|精听+分析", "N1长文|1篇|限时10min", "iTalki|25min|话题讨论"]],
+    ["三","10/7",["绿皮书N1|第23~23单元|新词+例句", "新完全掌握N1|第25~25节|默写例句", "N1全真模拟|听力|限时", "N1对比阅读|1组|定位", "自言自语|2min|弱项分析"]],
+    ["四","10/8",["绿皮书N1|复习前日+第24~24单元|复习+新词", "新完全掌握N1|复习前日+第26~26节|复习+默写", "N1听力|问题4|限时练反应", "N1阅读|全题型|模考", "场景:发表|3min"]],
+    ["五","10/9",["绿皮书N1|第25~25单元|新词+例句", "新完全掌握N1|第27~27节|默写例句", "N1听力|错题汇总", "N1阅读总复习|错题|分析", "iTalki|25min|模拟面试"]],
+    ["六","10/10",["绿皮书N1|第21~25单元|总复习→遮日→中", "新完全掌握N1|第23~27节|总复习→遮答案自测", "N1听力总复习|弱项|专项", "N1阅读最终|整理", "周总结|3min|N1后段"]]
+  ]},,
+  { name:"P3·N1 W6 10/12~10/17", days:[
+    ["一","10/12",["绿皮书N1|第26~26单元|新词+例句", "新完全掌握N1|第28~28节|默写例句", "N1听力|完整1套|限时", "N1阅读总复习|全题型|模考", "自言自语|2min|考试准备"]],
+    ["二","10/13",["绿皮书N1|复习前日+第27~27单元|复习+新词", "新完全掌握N1|复习前日+第29~29节|复习+默写", "N1听力|错题|精听+分析", "N1阅读总复习|错题|最终分析", "iTalki|25min|自由会话"]],
+    ["三","10/14",["绿皮书N1|第28~28单元|新词+例句", "新完全掌握N1|第30~30节|默写例句", "N1听力|全真模拟|限时", "N1长文|1篇|精读", "自言自语|2min|自信表达"]],
+    ["四","10/15",["绿皮书N1|复习前日+第29~29单元|复习+新词", "新完全掌握N1|复习前日+第31~31节|复习+默写", "N1听力|问题1~4|综合", "N1中篇|1篇|精读", "N1听力原文|选段|跟读"]],
+    ["五","10/16",["绿皮书N1|第30~30单元|新词+例句", "新完全掌握N1|第32~32节|默写例句", "N1听力|弱项|专项", "N1阅读总复习|弱项|专项", "场景:综合|3min|自由发表"]],
+    ["六","10/17",["绿皮书N1|第26~30单元|总复习→遮日→中", "新完全掌握N1|第28~32节|总复习→遮答案自测", "N1听力总复习|最终整理", "N1阅读最终|整理", "周总结|3min|N1总结"]]
+  ]},,
+  { name:"P3·N1 W7 10/19~10/24", days:[
+    ["一","10/19",["绿皮书N1|第31~31单元|新词+例句", "新完全掌握N1|第33~33节|默写例句", "N1听力|问题1~2|各2题精听", "N1短文|2篇|限时+精读", "自言自语|2min|N1目标"]],
+    ["二","10/20",["绿皮书N1|复习前日+第32~32单元|复习+新词", "新完全掌握N1|复习前日+第34~34节|复习+默写", "N1听力|完整1套|限时", "N1中篇|1篇|精读+概括", "场景:工作商谈|3min"]],
+    ["三","10/21",["绿皮书N1|第33~33单元|新词+例句", "新完全掌握N1|第35~35节|默写例句", "N1听力|错题|分析", "N1长文|1篇|精读+翻译", "自言自语|2min|社会话题"]],
+    ["四","10/22",["绿皮书N1|复习前日+第34~34单元|复习+新词", "新完全掌握N1|复习前日+第36~36节|复习+默写", "N1听力|问题3|精听", "N1长文|1篇|限时12min", "iTalki|25min|自由会话"]],
+    ["五","10/23",["绿皮书N1|第35~35单元|新词+例句", "新完全掌握N1|第37~37节|默写例句", "N1听力|问题4|限时3秒", "N1对比阅读|1组|定位", "自言自语|3min|观点发表"]],
+    ["六","10/24",["绿皮书N1|第31~35单元|总复习→遮日→中", "新完全掌握N1|第33~37节|总复习→遮答案自测", "N1听力|选段|Shadowing", "N1阅读|错题|分析", "周总结|3min"]]
+  ]},,
+  { name:"P3·N1 W8 10/26~10/31", days:[
+    ["一","10/26",["绿皮书N1|第36~36单元|新词+例句", "新完全掌握N1|第38~38节|默写例句", "N1听力|问题1~2|各2题精听", "N1短文|2篇|精读+生词", "自言自语|2min|新闻评论"]],
+    ["二","10/27",["绿皮书N1|复习前日+第37~37单元|复习+新词", "新完全掌握N1|复习前日+第39~39节|复习+默写", "N1听力|完整1套|限时", "N1中篇|1篇|精读+翻译", "场景:演讲发表|3min"]],
+    ["三","10/28",["绿皮书N1|第38~38单元|新词+例句", "新完全掌握N1|第40~40节|默写例句", "N1听力|错题|分析", "N1长文|1篇|精读+概括", "自言自语|2min|学习策略"]],
+    ["四","10/29",["绿皮书N1|复习前日+第39~39单元|复习+新词", "新完全掌握N1|复习前日+第41~41节|复习+默写", "N1听力|问题3|精听", "N1长文|1篇|限时12min", "iTalki|25min|话题讨论"]],
+    ["五","10/30",["绿皮书N1|第40~40单元|新词+例句", "新完全掌握N1|第42~42节|默写例句", "N1听力|问题4|限时3秒", "N1对比阅读|1组|定位", "自言自语|3min|自由表达"]],
+    ["六","10/31",["绿皮书N1|第36~40单元|总复习→遮日→中", "新完全掌握N1|第38~42节|总复习→遮答案自测", "N1听力|选段|Shadowing", "N1阅读|错题|分析", "周总结|3min"]]
+  ]},,
+  { name:"P4·真题 W1 11/2~11/7", days:[
+    ["一","11/2",["N1全部错词|第1轮|扫读", "N1语法错题|第1轮|重做", "真题第1套|听力|限时答题", "真题第1套|阅读|限时答题", "模拟总结|错题归类"]],
+    ["二","11/3",["N1高频词|遮中→日", "N1语法|第1~21节|复习", "第1套错题|听力|精听分析", "第1套错题|阅读|分析改进", "自言自语|2min|考前策略"]],
+    ["三","11/4",["N1全部错词|第2轮|扫读", "N1语法错题|第2轮|重做", "真题第2套|听力|限时答题", "真题第2套|阅读|限时答题", "模拟总结|错题归类"]],
+    ["四","11/5",["N1高频词|第2轮", "N1语法|第22~42节|复习", "第2套错题|听力|精听分析", "第2套错题|阅读|分析改进", "自言自语|2min|调整心态"]],
+    ["五","11/6",["N1全部错词|最终扫读", "N1全语法|快速总复习", "真题第3套|听力|限时答题", "真题第3套|阅读|限时答题", "模拟总结|整体评估"]],
+    ["六","11/7",["N1高频词|最终扫读", "N1全语法|遮答案自测", "第3套错题|听力|最终精听", "第3套错题|阅读|最终分析", "保持语感|轻松听力"]]
+  ]},,
+  { name:"P4·真题 W2 11/9~11/14", days:[
+    ["一","11/9",["N1全部错词|第1轮|扫读", "N1语法错题|第1轮|重做", "真题第1套|听力|限时答题", "真题第1套|阅读|限时答题", "模拟总结|错题归类"]],
+    ["二","11/10",["N1高频词|遮中→日", "N1语法|第1~21节|复习", "第1套错题|听力|精听分析", "第1套错题|阅读|分析改进", "自言自语|2min|考前策略"]],
+    ["三","11/11",["N1全部错词|第2轮|扫读", "N1语法错题|第2轮|重做", "真题第2套|听力|限时答题", "真题第2套|阅读|限时答题", "模拟总结|错题归类"]],
+    ["四","11/12",["N1高频词|第2轮", "N1语法|第22~42节|复习", "第2套错题|听力|精听分析", "第2套错题|阅读|分析改进", "自言自语|2min|调整心态"]],
+    ["五","11/13",["N1全部错词|最终扫读", "N1全语法|快速总复习", "真题第3套|听力|限时答题", "真题第3套|阅读|限时答题", "模拟总结|整体评估"]],
+    ["六","11/14",["N1高频词|最终扫读", "N1全语法|遮答案自测", "第3套错题|听力|最终精听", "第3套错题|阅读|最终分析", "保持语感|轻松听力"]]
+  ]},,
+  { name:"P4·真题 W3 11/16~11/21", days:[
+    ["一","11/16",["N1全部错词|第1轮|扫读", "N1语法错题|第1轮|重做", "真题第1套|听力|限时答题", "真题第1套|阅读|限时答题", "模拟总结|错题归类"]],
+    ["二","11/17",["N1高频词|遮中→日", "N1语法|第1~21节|复习", "第1套错题|听力|精听分析", "第1套错题|阅读|分析改进", "自言自语|2min|考前策略"]],
+    ["三","11/18",["N1全部错词|第2轮|扫读", "N1语法错题|第2轮|重做", "真题第2套|听力|限时答题", "真题第2套|阅读|限时答题", "模拟总结|错题归类"]],
+    ["四","11/19",["N1高频词|第2轮", "N1语法|第22~42节|复习", "第2套错题|听力|精听分析", "第2套错题|阅读|分析改进", "自言自语|2min|调整心态"]],
+    ["五","11/20",["N1全部错词|最终扫读", "N1全语法|快速总复习", "真题第3套|听力|限时答题", "真题第3套|阅读|限时答题", "模拟总结|整体评估"]],
+    ["六","11/21",["N1高频词|最终扫读", "N1全语法|遮答案自测", "第3套错题|听力|最终精听", "第3套错题|阅读|最终分析", "保持语感|轻松听力"]]
+  ]},,
+  { name:"P4·真题 W4 11/23~11/28", days:[
+    ["一","11/23",["N1全部错词|第1轮|扫读", "N1语法错题|第1轮|重做", "真题第1套|听力|限时答题", "真题第1套|阅读|限时答题", "模拟总结|错题归类"]],
+    ["二","11/24",["N1高频词|遮中→日", "N1语法|第1~21节|复习", "第1套错题|听力|精听分析", "第1套错题|阅读|分析改进", "自言自语|2min|考前策略"]],
+    ["三","11/25",["N1全部错词|第2轮|扫读", "N1语法错题|第2轮|重做", "真题第2套|听力|限时答题", "真题第2套|阅读|限时答题", "模拟总结|错题归类"]],
+    ["四","11/26",["N1高频词|第2轮", "N1语法|第22~42节|复习", "第2套错题|听力|精听分析", "第2套错题|阅读|分析改进", "自言自语|2min|调整心态"]],
+    ["五","11/27",["N1全部错词|最终扫读", "N1全语法|快速总复习", "真题第3套|听力|限时答题", "真题第3套|阅读|限时答题", "模拟总结|整体评估"]],
+    ["六","11/28",["N1高频词|最终扫读", "N1全语法|遮答案自测", "第3套错题|听力|最终精听", "第3套错题|阅读|最终分析", "保持语感|轻松听力"]]
+  ]},,
+  { name:"P4·真题 W5 11/30~12/5", days:[
+    ["一","11/30",["N1全部错词|第1轮|扫读", "N1语法错题|第1轮|重做", "真题第1套|听力|限时答题", "真题第1套|阅读|限时答题", "模拟总结|错题归类"]],
+    ["二","12/1",["N1高频词|遮中→日", "N1语法|第1~21节|复习", "第1套错题|听力|精听分析", "第1套错题|阅读|分析改进", "自言自语|2min|考前策略"]],
+    ["三","12/2",["N1全部错词|第2轮|扫读", "N1语法错题|第2轮|重做", "真题第2套|听力|限时答题", "真题第2套|阅读|限时答题", "模拟总结|错题归类"]],
+    ["四","12/3",["N1高频词|第2轮", "N1语法|第22~42节|复习", "第2套错题|听力|精听分析", "第2套错题|阅读|分析改进", "自言自语|2min|调整心态"]],
+    ["五","12/4",["N1全部错词|最终扫读", "N1全语法|快速总复习", "真题第3套|听力|限时答题", "真题第3套|阅读|限时答题", "模拟总结|整体评估"]],
+    ["六","12/5",["N1高频词|最终扫读", "N1全语法|遮答案自测", "第3套错题|听力|最终精听", "第3套错题|阅读|最终分析", "保持语感|轻松听力"]]
+  ]},
+];
+
+function splitTask(t) {
+  if (t === "休息" || t === "休息/补漏" || t === "休息/补漏+回顾" || t === "补漏") return ["", "", t];
+  var parts = t.split("|");
+  if (parts.length === 3) {
+    return [parts[0].trim(), parts[1].trim(), parts[2].trim()];
+  }
+  return [t, "", ""];
+}
+
+function key(wi, di, mi) { return "n1p1_" + wi + "_" + di + "_" + mi; }
+function load(k) { try { return localStorage.getItem(k) === "1"; } catch(e) { return false; } }
+function save(k, v) { try { if(v) localStorage.setItem(k,"1"); else localStorage.removeItem(k); } catch(e) {} }
+
+function render() {
+  const c = document.getElementById("weeksContainer");
+  c.innerHTML = "";
+  let total = 0;
+  const today = new Date();
+  const todayStr = (today.getMonth()+1) + "/" + today.getDate();
+  let currentWeekIdx = -1;
+  function toNum(d) { var p = d.split("/"); return parseInt(p[0],10)*100 + parseInt(p[1],10); }
+  WEEKS.forEach((wk, wi) => {
+    var lastDay = wk.days[wk.days.length-1];
+    var firstDay = wk.days[0];
+    var lastDate = lastDay[1];
+    var firstDate = firstDay[1];
+    var tn = toNum(todayStr), fn = toNum(firstDate), ln = toNum(lastDate);
+    if (tn >= fn && tn <= ln) { currentWeekIdx = wi; }
+  });
+  if (currentWeekIdx === -1) currentWeekIdx = 0;
+
+  WEEKS.forEach((wk, wi) => {
+    const card = document.createElement("div");
+    card.className = "week-card";
+    const hdr = document.createElement("div");
+    hdr.className = "week-header";
+    hdr.innerHTML = "<span class=\"week-title\">" + wk.name + "</span><span class=\"week-progress\" id=\"wp_" + wi + "\">0/30</span> <span class=\"toggle-icon\">&#9660;</span>";
+    hdr.onclick = () => { hdr.classList.toggle("collapsed"); body.classList.toggle("collapsed"); };
+    const body = document.createElement("div");
+    body.className = "week-body" + (wi !== currentWeekIdx ? " collapsed" : "");
+
+    const tbl = document.createElement("table");
+    const thd = document.createElement("thead");
+    const hr = document.createElement("tr");
+    const h1 = document.createElement("th");
+    h1.textContent = "学习细项";
+    hr.appendChild(h1);
+    wk.days.forEach((d, di) => {
+      const th = document.createElement("th");
+      let cls = "date-header";
+      if (wi === currentWeekIdx && d[1] === todayStr) cls += " today-header";
+      th.className = cls;
+      th.innerHTML = "<span class=\"day-label\">" + d[1] + "</span><span class=\"date-label\">周" + d[0] + "</span>";
+      hr.appendChild(th);
+    });
+    thd.appendChild(hr);
+    tbl.appendChild(thd);
+
+    const tb = document.createElement("tbody");
+    MODULES.forEach((mod, mi) => {
+      const tr = document.createElement("tr");
+      tr.className = "module-label-row " + mod.id;
+      const lt = document.createElement("td");
+      lt.textContent = mod.label;
+      tr.appendChild(lt);
+      wk.days.forEach((d, di) => {
+        const td = document.createElement("td");
+        const task = d[2][mi];
+        const isRest = task.includes("休息") || task === "补漏";
+        if (isRest) {
+          td.className = "rest-cell";
+          td.innerHTML = "<span class=\"cell-line2\">" + task + "</span>";
+          tr.appendChild(td);
+          return;
+        }
+        const k = key(wi, di, mi);
+        const done = load(k);
+        let cellCls = "plan-cell" + (done ? " done" : "");
+        if (wi === currentWeekIdx && d[1] === todayStr) cellCls += " today-cell";
+        td.className = cellCls;
+        var lines = splitTask(task);
+        td.innerHTML = "<div class=\"cell-content\"><span class=\"cell-line1\">" + lines[0] + "</span><span class=\"cell-line2\">" + lines[1] + "</span><span class=\"cell-line3\">" + lines[2] + "</span></div>";
+        td.onclick = () => {
+          const nv = !load(k);
+          save(k, nv);
+          if (nv) { td.classList.add("done"); } else { td.classList.remove("done"); }
+          updateStats();
+        };
+        tr.appendChild(td);
+      });
+      tb.appendChild(tr);
+    });
+    tbl.appendChild(tb);
+    body.appendChild(tbl);
+
+    const sum = document.createElement("div");
+    sum.className = "week-summary";
+    sum.innerHTML = "<span></span><span>完成 <b id=\"wd_" + wi + "\" style=\"color:var(--primary)\">0</b> / 30</span>";
+    card.appendChild(hdr);
+    card.appendChild(body);
+    card.appendChild(sum);
+    c.appendChild(card);
+  });
+  updateStats();
+}
+
+function updateStats() {
+  let done = 0, total = 0;
+  WEEKS.forEach((wk, wi) => {
+    let wd = 0;
+    wk.days.forEach((d, di) => {
+      MODULES.forEach((_, mi) => {
+        const task = d[2][mi];
+        const isRest = task.includes("休息") || task === "补漏";
+        if (isRest) return;
+        total++;
+        if (load(key(wi, di, mi))) { wd++; done++; }
+      });
+    });
+    document.getElementById("wd_" + wi).textContent = wd;
+    document.getElementById("wp_" + wi).textContent = wd + "/30";
+  });
+  document.getElementById("statDone").textContent = done;
+  const p = total > 0 ? Math.round(done/total*100) : 0;
+  document.getElementById("statPercent").textContent = p + "%";
+  document.getElementById("overallProgress").style.width = p + "%";
+}
+
+function resetAll() {
+  if (!confirm("确定重置所有进度？")) return;
+  const keys = Object.keys(localStorage);
+  keys.filter(function(k) { return k.startsWith("n1p1_"); }).forEach(function(k) { localStorage.removeItem(k); });
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
