@@ -54,6 +54,9 @@ header .subtitle{font-size:.8rem;color:var(--text-muted);margin-top:1px}
   font-family:inherit
 }
 .reset-btn:hover{background:#fee2e2;color:#dc2626}
+.lang-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.6);color:#fff;padding:3px 10px;border-radius:4px;cursor:pointer;font-size:.78rem;opacity:1;transition:all .15s;font-family:inherit;font-weight:500}
+.lang-btn:hover{background:rgba(255,255,255,.25)}
+.lang-btn.active{background:rgba(255,255,255,.3);border-color:#fff}
 
 .week-card{
   background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
@@ -190,20 +193,25 @@ tbody tr:hover td:not(:first-child){background:#f8fafc}
 
 <header>
   <div>
-    <h1>📚 JLPT N1 Study Plan</h1>
+    <h1 id="titleH1">📚 JLPT N1 Study Plan</h1>
     <div class="subtitle">N3→N2→N1 · 22Weeks · 7/6 ~ 12/5 ·</div>
   </div>
   <div class="stats">
-    <div class="stat"><div class="stat-value" id="statProgress" style="font-size:1.3rem">0%</div><div class="stat-label">Schedule Variance</div></div>
-    <div class="stat"><div class="stat-value" id="statPercent">0%</div><div class="stat-label">Completion</div></div>
+    <div class="stat"><div class="stat-value" id="statProgress" style="font-size:1.3rem">0%</div><div class="stat-label" id="svLabel">Schedule Variance</div></div>
+    <div class="stat"><div class="stat-value" id="statPercent">0%</div><div class="stat-label" id="cpLabel">Completion</div></div>
     <div><div class="progress-track"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div></div>
-    <button class="reset-btn" onclick="resetAll()">↺ Reset</button>
+    <button class="reset-btn" id="rstBtn" onclick="resetAll()">↺ Reset</button>
+    <div style="display:flex;gap:4px;align-items:center;margin-left:4px">
+      <button class="lang-btn active" data-lang="cn" onclick="setLang('cn')">中文</button>
+      <button class="lang-btn" data-lang="jp" onclick="setLang('jp')">日</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+    </div>
   </div>
 </header>
 
 <div class="methods-card">
   <div class="methods-header" onclick="this.parentNode.querySelector('.methods-body').classList.toggle('open')">
-    <span class="title">📖 学习方法</span>
+    <span class="title" id="mthTitle">📖 学习方法</span>
     <span class="arrow">▼</span>
   </div>
   <div class="methods-body">
@@ -433,6 +441,37 @@ const WEEKS = [
   ]},
 ];
 
+
+// Language support
+var LANG = {
+  cn:{sv:"进度差异",comp:"完成率",wcomp:"完成",rst:"重置",cfm:"确定重置所有进度？",col:"学习细项",title:"📚 JLPT N1 Study Plan",mth:"📖 学习方法"},
+  jp:{sv:"進捗差異",comp:"完了率",wcomp:"完了",rst:"リセット",cfm:"すべての進捗をリセットしますか？",col:"学習項目",title:"📚 JLPT N1 Study Plan",mth:"📖 勉強方法"},
+  en:{sv:"Schedule Variance",comp:"Completion",wcomp:"Done",rst:"Reset",cfm:"Reset all progress?",col:"Tasks",title:"📚 JLPT N1 Study Plan",mth:"📖 Study Methods"}
+};
+var curLang = "cn"; try { curLang = localStorage.getItem("plan_lang") || "cn"; } catch(e) { console.log("LS err:",e); }
+var LANG_MODS = {
+  cn:["📖 词汇(70min)","📝 语法(60min)","🎧 听力(70min)","📰 阅读(60min)","💬 会话(40min)"],
+  jp:["📖 語彙(70分)","📝 文法(60分)","🎧 聴解(70分)","📰 読解(60分)","💬 会話(40分)"],
+  en:["📖 Vocab(70m)","📝 Grammar(60m)","🎧 Listening(70m)","📰 Reading(60m)","💬 Speaking(40m)"]
+};
+function updateLang(){
+  try {
+    var t = LANG[curLang] || LANG.cn;
+    var el=document.getElementById("svLabel");if(el)el.textContent=t.sv;
+    el=document.getElementById("cpLabel");if(el)el.textContent=t.comp;
+    el=document.getElementById("rstBtn");if(el)el.innerHTML="↺ "+t.rst;
+    el=document.getElementById("mthTitle");if(el)el.innerHTML=t.mth;
+    document.querySelectorAll("#weeksContainer thead th:first-child").forEach(function(e){e.textContent=t.col;});
+    el=document.getElementById("titleH1");if(el)el.textContent=t.title;
+    document.title="JLPT N1 Study Plan";
+    var mods = LANG_MODS[curLang] || LANG_MODS.cn;
+    document.querySelectorAll(".module-label-row td:first-child").forEach(function(c,i){if(i<5)c.textContent=mods[i];});
+    document.querySelectorAll(".wk-label").forEach(function(l){l.textContent=t.wcomp;});
+    document.querySelectorAll(".lang-btn").forEach(function(b){b.classList.toggle("active",b.dataset.lang===curLang);});
+  } catch(e) { console.log("Lang err:",e); }
+}
+function setLang(l){curLang=l;try{localStorage.setItem("plan_lang",l);}catch(e){}updateLang();}
+
 function splitTask(t) {
   if (t === "休息" || t === "休息/补漏" || t === "休息/补漏+回顾" || t === "补漏") return ["", "", t];
   var parts = t.split("|");
@@ -444,7 +483,7 @@ function splitTask(t) {
 
 function key(wi, di, mi) { return "n1p1_" + wi + "_" + di + "_" + mi; }
 function load(k) { try { var v = localStorage.getItem(k); return v === "1" ? 1 : v === "2" ? 2 : 0; } catch(e) { return 0; } }
-function save(k, v) { try { if(v===1) localStorage.setItem(k,"1"); else if(v===2) localStorage.setItem(k,"2"); else localStorage.removeItem(k); } catch(e) {} }
+function save(k, v) { try { if(v===1) localStorage.setItem(k,"1"); else if(v===2) localStorage.setItem(k,"2"); else try{localStorage.removeItem(k);}catch(e){} } catch(e) {} }
 
 function toNum(d) { var p = d.split("/"); return parseInt(p[0],10)*100 + parseInt(p[1],10); }
 
@@ -535,7 +574,7 @@ function render() {
 
     const sum = document.createElement("div");
     sum.className = "week-summary";
-    sum.innerHTML = "<span></span><span>完成 <b id=\"wd_" + wi + "\" style=\"color:var(--primary)\">0</b> / 30</span>";
+    sum.innerHTML = "<span></span><span><span class=\"wk-label\">完成</span> <b id=\"wd_" + wi + "\" style=\"color:var(--primary)\">0</b> / 30</span>";
     card.appendChild(hdr);
     card.appendChild(body);
     card.appendChild(sum);
@@ -582,13 +621,14 @@ function updateStats() {
 }
 
 function resetAll() {
-  if (!confirm("Reset all progress?")) return;
+  if (!confirm((LANG[curLang]||LANG.cn).cfm)) return;
   const keys = Object.keys(localStorage);
-  keys.filter(function(k) { return k.startsWith("n1p1_"); }).forEach(function(k) { localStorage.removeItem(k); });
+  keys.filter(function(k) { return k.startsWith("n1p1_"); }).forEach(function(k) { try{localStorage.removeItem(k);}catch(e){} });
   render();
 }
 
-render();
+try { render(); } catch(e) { console.log("RenderErr:",e); }
+try { updateLang(); } catch(e) { console.log("LangErr:",e); }
 </script>
 </body>
 </html>
