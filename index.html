@@ -194,10 +194,10 @@ tbody tr:hover td:not(:first-child){background:#f8fafc}
     <div class="subtitle">N3→N2→N1 · 22Weeks · 7/6 ~ 12/5 ·</div>
   </div>
   <div class="stats">
-    <div class="stat"><div class="stat-value" id="statProgress" style="font-size:1.3rem">0%</div><div class="stat-label">进度(应完成)</div></div>
-    <div class="stat"><div class="stat-value" id="statPercent">0%</div><div class="stat-label">完成率</div></div>
+    <div class="stat"><div class="stat-value" id="statProgress" style="font-size:1.3rem">0%</div><div class="stat-label">Schedule Variance</div></div>
+    <div class="stat"><div class="stat-value" id="statPercent">0%</div><div class="stat-label">Completion</div></div>
     <div><div class="progress-track"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div></div>
-    <button class="reset-btn" onclick="resetAll()">↺ 重置</button>
+    <button class="reset-btn" onclick="resetAll()">↺ Reset</button>
   </div>
 </header>
 
@@ -568,9 +568,7 @@ function updateStats() {
     document.getElementById("wd_" + wi).textContent = wd + (wm ? "+" + wm : "");
     document.getElementById("wp_" + wi).textContent = (wd + wm) + "/30";
   });
-  document.getElementById("statDone").textContent = done + (makeup ? "+" + makeup : "");
   const p = total > 0 ? Math.round((done+makeup)/total*100) : 0;
-  document.getElementById("statMakeup").textContent = makeup;
   document.getElementById("statPercent").textContent = p + "%";
   document.getElementById("overallProgress").style.width = p + "%";
   var actual = done + makeup;
@@ -584,7 +582,7 @@ function updateStats() {
 }
 
 function resetAll() {
-  if (!confirm("确定重置所有进度？")) return;
+  if (!confirm("Reset all progress?")) return;
   const keys = Object.keys(localStorage);
   keys.filter(function(k) { return k.startsWith("n1p1_"); }).forEach(function(k) { localStorage.removeItem(k); });
   render();
