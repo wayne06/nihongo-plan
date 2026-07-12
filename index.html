@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JLPT N1 学习计划</title>
+<title>JLPT N1 Study Plan</title>
 <style>:root {
   --bg: #f0f2f5;
   --card: #ffffff;
@@ -190,8 +190,8 @@ tbody tr:hover td:not(:first-child){background:#f8fafc}
 
 <header>
   <div>
-    <h1>📚 JLPT N1 学习计划</h1>
-    <div class="subtitle">N3→N2→N1 · 22周 · 7/6 ~ 12/5  · 点击切换: 未完成→已完成→补做</div>
+    <h1>📚 JLPT N1 Study Plan</h1>
+    <div class="subtitle">N3→N2→N1 · 22Weeks · 7/6 ~ 12/5 ·</div>
   </div>
   <div class="stats">
     <div class="stat"><div class="stat-value" id="statProgress" style="font-size:1.3rem">0%</div><div class="stat-label">进度(应完成)</div></div>
@@ -546,12 +546,14 @@ function render() {
 
 function updateStats() {
   let done = 0, makeup = 0, total = 0, expected = 0;
-  var tn = toNum((new Date().getMonth()+1) + "/" + new Date().getDate());
+  var today = new Date();
+  var todayM = today.getMonth()+1, todayD = today.getDate();
   WEEKS.forEach((wk, wi) => {
     let wd = 0, wm = 0;
     wk.days.forEach((d, di) => {
-      var dn = toNum(d[1]);
-      var isPast = (dn <= tn);
+      var p = d[1].split("/");
+      var dm = parseInt(p[0],10), dd = parseInt(p[1],10);
+      var isPast = (dm < todayM) || (dm === todayM && dd <= todayD);
       MODULES.forEach((_, mi) => {
         const task = d[2][mi];
         const isRest = task.includes("休息") || task === "补漏";
@@ -574,8 +576,11 @@ function updateStats() {
   var actual = done + makeup;
   var prog = expected > 0 ? Math.round(actual / expected * 100) : 0;
   var diff = prog - 100;
-  document.getElementById("statProgress").textContent = (diff > 0 ? "+" + diff : "" + diff) + "%";
-  document.getElementById("statProgress").style.color = diff >= 0 ? "var(--accent-green)" : "#f59e0b";
+  var el = document.getElementById("statProgress");
+  if (el) {
+    el.textContent = (diff > 0 ? "+" + diff : "" + diff) + "%";
+    el.style.color = diff >= 0 ? "var(--accent-green)" : "#f59e0b";
+  }
 }
 
 function resetAll() {
