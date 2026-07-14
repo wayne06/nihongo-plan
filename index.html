@@ -186,24 +186,26 @@ tbody tr:hover td:not(:first-child){background:#f8fafc}
 
 <header>
   <div>
-    <h1>📚 JLPT N1 学习计划</h1>
-    <div class="subtitle">N3→N2→N1 · 22周 · 7/13 ~ 12/12</div>
+    <h1>📚 JLPT N1 学習計画</h1>
+    <div class="subtitle">N3→N2→N1 · 22週間 · 7/13 ~ 12/12</div>
   </div>
   <div class="stats">
-    <div class="stat"><div class="stat-value" id="statDone">0</div><div class="stat-label">已完成</div></div>
-    <div class="stat"><div class="stat-value" id="statTotal">0</div><div class="stat-label">总计划</div></div>
-    <div class="stat"><div class="stat-value" id="statPercent">0%</div><div class="stat-label">完成率</div></div>
+    <div class="stat"><div class="stat-value" id="statProgress" style="font-size:1.3rem">0%</div><div class="stat-label">進捗差異</div></div>
+    <div class="stat"><div class="stat-value" id="statPercent">0%</div><div class="stat-label">完了率</div></div>
     <div><div class="progress-track"><div class="progress-fill" id="overallProgress" style="width:0%"></div></div></div>
-    <button class="reset-btn" onclick="resetAll()">↺ 重置</button>
+    <button class="reset-btn" onclick="resetAll()">↺ リセット</button>
   </div>
 
-      <button class="lang-btn active" data-lang="cn" onclick="setLang('cn')" style="margin-left:4px">中文</button>
-      <button class="lang-btn" data-lang="jp" onclick="setLang('jp')">日</button>
-      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button></header>
+      
+      
+      
+    </div>
+  </div>
+</header>
 
 <div class="methods-card">
   <div class="methods-header" onclick="this.parentNode.querySelector('.methods-body').classList.toggle('open')">
-    <span class="title">📖 学习方法</span>
+    <span class="title">📖 勉強方法</span>
     <span class="arrow">▼</span>
   </div>
   <div class="methods-body">
@@ -247,11 +249,11 @@ tbody tr:hover td:not(:first-child){background:#f8fafc}
 <script>
 
 const MODULES = [
-  {id:"m0", label:"📖 词汇(70min)"},
-  {id:"m1", label:"📝 语法(60min)"},
-  {id:"m2", label:"🎧 听力(70min)"},
-  {id:"m3", label:"📰 阅读(60min)"},
-  {id:"m4", label:"💬 会话(40min)"}
+  {id:"m0", label:"📖 語彙(70分)"},
+  {id:"m1", label:"📝 文法(60分)"},
+  {id:"m2", label:"🎧 聴解(70分)"},
+  {id:"m3", label:"📰 読解(60分)"},
+  {id:"m4", label:"💬 会話(40分)"}
 ];
 
 const WEEKS = [
@@ -435,34 +437,6 @@ const WEEKS = [
 
 
 // Language support
-var LANG = {
-  cn:{sv:"进度差异",comp:"完成率",wcomp:"完成",rst:"重置",cfm:"确定重置所有进度？",col:"学习细项",title:"📚 JLPT N1 Study Plan",mth:"📖 学习方法"},
-  jp:{sv:"進捗差異",comp:"完了率",wcomp:"完了",rst:"リセット",cfm:"すべての進捗をリセットしますか？",col:"学習項目",title:"📚 JLPT N1 Study Plan",mth:"📖 勉強方法"},
-  en:{sv:"Schedule Variance",comp:"Completion",wcomp:"Done",rst:"Reset",cfm:"Reset all progress?",col:"Tasks",title:"📚 JLPT N1 Study Plan",mth:"📖 Study Methods"}
-};
-var curLang = "cn"; try { curLang = localStorage.getItem("plan_lang") || "cn"; } catch(e) { console.log("LS err:",e); }
-var LANG_MODS = {
-  cn:["📖 词汇(70min)","📝 语法(60min)","🎧 听力(70min)","📰 阅读(60min)","💬 会话(40min)"],
-  jp:["📖 語彙(70分)","📝 文法(60分)","🎧 聴解(70分)","📰 読解(60分)","💬 会話(40分)"],
-  en:["📖 Vocab(70m)","📝 Grammar(60m)","🎧 Listening(70m)","📰 Reading(60m)","💬 Speaking(40m)"]
-};
-function updateLang(){
-  try {
-    var t = LANG[curLang] || LANG.cn;
-    var el=document.getElementById("svLabel");if(el)el.textContent=t.sv;
-    el=document.getElementById("cpLabel");if(el)el.textContent=t.comp;
-    el=document.getElementById("rstBtn");if(el)el.innerHTML="↺ "+t.rst;
-    el=document.getElementById("mthTitle");if(el)el.innerHTML=t.mth;
-    document.querySelectorAll("#weeksContainer thead th:first-child").forEach(function(e){e.textContent=t.col;});
-    el=document.getElementById("titleH1");if(el)el.textContent=t.title;
-    document.title="JLPT N1 Study Plan";
-    var mods = LANG_MODS[curLang] || LANG_MODS.cn;
-    document.querySelectorAll(".module-label-row td:first-child").forEach(function(c,i){if(i<5)c.textContent=mods[i];});
-    document.querySelectorAll(".wk-label").forEach(function(l){l.textContent=t.wcomp;});
-    document.querySelectorAll(".lang-btn").forEach(function(b){b.classList.toggle("active",b.dataset.lang===curLang);});
-  } catch(e) { console.log("Lang err:",e); }
-}
-function setLang(l){curLang=l;try{localStorage.setItem("plan_lang",l);}catch(e){}updateLang();}
 function splitTask(t) {
   if (t === "休息" || t === "休息/补漏" || t === "休息/补漏+回顾" || t === "补漏") return ["", "", t];
   var parts = t.split("|");
@@ -508,7 +482,7 @@ function render() {
     const thd = document.createElement("thead");
     const hr = document.createElement("tr");
     const h1 = document.createElement("th");
-    h1.textContent = "学习细项";
+    h1.textContent = "学習項目";
     hr.appendChild(h1);
     wk.days.forEach((d, di) => {
       const th = document.createElement("th");
